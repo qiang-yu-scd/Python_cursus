@@ -3,4 +3,4 @@ for int in getallen:
     print (int)
 if getallen % 2 == 0
     print ()
-
+print()
