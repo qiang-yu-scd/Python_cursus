@@ -1,10 +1,17 @@
+from random import randint
 def monopolyworp():
-    import random
-    worpen = set()
-    for i in range(0, 2):
-        dice = random.randrange(1, 7)
-        print()
-        print(worpen)
-    return dice
+    count = 0
+    for i in range(0,3):
+        x, y = randint(1,6), randint(1,6)
+        z = x + y
+        if x != y:
+            print(x, ' + ', y, ' = ' + str(z))
+            break
+        elif count < 2 and x == y:
+            print(x, ' + ', y, ' = ' + str(z) + ' (dubbel)')
+            count += 1
+        elif count == 2 and x == y:
+            print(x, ' + ', y, ' = ' + str(z) + ' (direct naar gevangenis)')
+            break
 
-print(monopolyworp())
+monopolyworp()
