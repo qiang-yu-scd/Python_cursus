@@ -1,79 +1,36 @@
-headers = ['Artikelnummer', 'Artikelcode', 'Naam', 'Voorraad', 'Prijs']
+import csv
+def artikels_toevoegen():
+     with open('producten.csv', 'w', newline='') as artikel:
+        fieldnames = ['Artikelnummer', 'Artikelcode', 'Naam', 'Voorraad', 'Prijs']
+        writer = csv.DictWriter(artikel, delimiter=';', fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerow({'Artikelnummer': 121, 'Artikelcode': 'ABC123', 'Naam': 'Highlight pen', 'Voorraad': 231, 'Prijs': 0.56})
+        writer.writerow({'Artikelnummer': 123, 'Artikelcode': 'PQR678', 'Naam': 'Nietmachine', 'Voorraad': 587, 'Prijs': 9.99})
+        writer.writerow({'Artikelnummer': 128, 'Artikelcode': 'ZYX163', 'Naam': 'Bureaulamp', 'Voorraad': 34, 'Prijs': 19.95})
+        writer.writerow({'Artikelnummer': 137, 'Artikelcode': 'MLK709', 'Naam': 'Monitorstandaard', 'Voorraad': 66, 'Prijs': 32.50})
+        writer.writerow({'Artikelnummer': 271, 'Artikelcode': 'TR665', 'Naam': 'Ipad hoes', 'Voorraad': 155, 'Prijs': 19.01})
 
-artikelen = {
+artikels_toevoegen()
 
-    ('121', 'ABC123', 'Highlight pen', '231', '0.56'),
+with open('producten.csv', 'r') as product:
+    reader = csv.DictReader(product, delimiter=';')
+    productLijst = []
+    prijsLijst = []
+    voorraadLijst = []
+    for row in reader:
+        prijsLijst += [float(row['Prijs'])]
+        productLijst += [row]
+        voorraadLijst += [int(row['Voorraad'])]
 
-    ('123','PQR678', 'Nietmachine', '587', '9.99'),
+    min_voorraad = min(voorraadLijst)
+    hoogste_prijs = max(prijsLijst)
+    totale_voorraad = sum(voorraadLijst)
 
-    ('128','ZYX163', 'Bureaulamp', '34', '19.95'),
+    for art in productLijst:
+        if min_voorraad == int(art['Voorraad']):
+            print('Er zijn slechts {} exemplaren in voorraad van het product met nummer {}'.format(art['Voorraad'], art[
+                'Artikelnummer']))
+        if hoogste_prijs == float(art['Prijs']):
+            print('Het duurste artikel is {} en die kost {} Euro'.format(art['Naam'], art['Prijs']))
 
-    ('137','MLK709', 'Monitorstandaard', '66', '32.50'),
-
-    ('271','TRS665', 'Ipad hoes', '155', '19.00')
-
-}
-
-
-
-with open('artikelen.csv', 'w') as file:
-
-    file.truncate()
-
-    file.write(';'.join(headers))
-
-    file.write('\n')
-
-    for artikel in artikelen:
-
-        file.write(';'.join(artikel))
-
-        file.write('\n')
-
-    file.close()
-
-
-
-with open('artikelen.csv', 'r') as file:
-
-    file.readline() # Skip headers
-
-    content = file.readlines()
-
-    artikelen = []
-
-    voorraden = []
-
-    for line in content:
-
-        nummer, code, naam, voorraad, prijs = line.rstrip().split(';')
-
-        artikelen.append((int(nummer), code, naam, int(voorraad), float(prijs)))
-
-        voorraden.append(int(voorraad))
-
-    # Duurste.
-
-    duursteArtikel = sorted(artikelen, key=lambda x: x[4])[-1]
-
-    print('Het duurste artikel is {} en die kost '
-
-          '{} Euro'.format(duursteArtikel[2], duursteArtikel[4]))
-
-    # Kleinste voorraad.
-
-    kleinsteVoorraad = sorted(artikelen, key=lambda x: x[3])[0]
-
-    print('Er zijn slechts {} exemplaren in voorraad van het product '
-
-          'met nummer {}'.format(kleinsteVoorraad[3], kleinsteVoorraad[0]))
-
-    # Totaal aantal producten.
-
-    aantal = sum(voorraden)
-
-    print('In totaal hebben wij {} producten in ons magazijn '
-
-          'liggen'.format(aantal))
-
-    file.close()
+print('In totaal hebben wij {} producten in ons magazijn liggen'.format(totale_voorraad))
