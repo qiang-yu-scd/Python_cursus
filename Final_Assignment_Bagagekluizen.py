@@ -1,34 +1,70 @@
-print('Menu\n1: Ik wil weten hoeveel kluizen nog vrij zijn\n2: Ik wil een nieuwe kluis\n3: Ik wil even iets uit mijn kluis halen\n4: Ik geef mijn kluis terug')
-
+infile = open('kluizen.txt', 'r')
+regels = infile.readlines()
 
 def toon_aantal_kluizen_vrij():
-    infile = open('kluizen.txt', 'r')
-    lstRegels = infile.readlines()
-    aantalkluizen = len(lstRegels)
-    return aantalkluizen
-aantalkluizen = toon_aantal_kluizen_vrij()
-print('Aantal vrije kluizen zijn:' + str(aantalkluizen))
+    regelsV = 0
+    for line in regels:
+        regelsV += 1
+    infile.close()
+    print('\n Er zijn nog ' + str(12 - regelsV), ' kluizen vrij.')
 
 def nieuwe_kluis():
-    kluisnummers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-    infile = open('kluizen.txt')
-    regels = infile.readlines()
+    list = []
+    for i in range(1, 13):
+        list += [i]
+    for regelN in regels:
+        regel_split =regelN.split(";")
+        if int(regel_split[0]) in list:
+            test = int(regel_split[0])
+            test1 = list.pop(list.index(test))
+    if len(list) == 0:
+        print("Sorry, alle kluisjes zijn in gebruik.")
+    else:
+        print('Deze kluisjes zijn nog vrij: ' + str(list))
+        kies = int(input('Welk kluisje wilt u hebben?: '))
+        if kies in list:
+            print("U krijgt kluisje " + str(kies))
+            code = input("geef een pincode van minimaal 4 cijfers ")
+            if len(code) >= 4:
+                print('Gefeliciteerd, u heeft nu een kluisje.')
+                outfile = open('kluizen.txt', 'a')
+                outfile.write(str(kies) + ';' + str(code) + '\n')
+                outfile.close()
+            else:
+                print('Sorry, uw code is niet goed.')
+        else:
+            print("Sorry, dit is niet mogelijk!.")
+
+def kluis_openen():
+    kluisje = input('Wat is uw kluisnummer:')
+    codes = input("Wat is uw code: ")
+    kluis = False
     for regel in regels:
-        onderdelen = regel.split(',')
-        kluisnr = int(onderdelen[0])
-        kluisnummers.remove(kluisnr)
+        regel_split = regel.split(";")
+        if kluisje == regel_split[0] and codes == regel_split[1].strip():
+            kluis = True
+            print('Het kluisje is nu geopend.')
+    if kluis == False:
+        print('Dit is niet uw kluisje.')
 
-#def kluis_openen():
+def kluisteruggeven():
+    print('\nSorry, dit keuze is nog niet mogelijk!')
 
-#def kluis_teruggeven():
-
-keuze = int(input('Welke keuze?'))
-if keuze == 1:
-    vrijekluizen = toon_aantal_kluizen_vrij()
-    print(vrijekluizen)
-elif keuze == 2:
-    nieuwekluis = nieuwe_kluis()
-elif keuze == 3:
+menu = '1: Ik wil weten hoeveel kluizen nog vrij zijn. \n2: Ik wil een nieuwe kluis. \n3: Ik wil even iets uit mijn kluis halen. \n4: Ik geef mijn kluis terug.'
+print(menu)
+nummer = int(input('Kies een nummer om verder te gaan: '))
+if nummer <= 0 or nummer >= 5:
+    print("\nSorry, dit is geen geldig getal. Probeer het opnieuw.")
+    print('\n1: Ik wil weten hoeveel kluizen nog vrij zijn. \n2: Ik wil een nieuwe kluis. \n3: Ik wil even iets uit mijn kluis halen.\n4: Ik geef mijn kluis terug.')
+    nummer = int(input('Kies een nummer om verder te gaan: '))
+    if nummer <= 0 or nummer >= 5:
+        print('Probeer opnieuw!')
+        print(exit())
+if nummer == 1:
+    toon_aantal_kluizen_vrij()
+if nummer == 2:
+    nieuwe_kluis()
+if nummer == 3:
     kluis_openen()
-elif keuze == 4:
-    kluis_teruggeven()
+if nummer == 4:
+    kluisteruggeven()

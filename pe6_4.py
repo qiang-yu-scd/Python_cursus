@@ -1,10 +1,11 @@
-oldpassword = input ('Voer hier je oude wachtwoord in: ')
-newpassword = input ('Voer hier je nieuwe wachtwoord in: ')
-def new_password(wachtwoord):
-    if str(oldpassword) != str(wachtwoord) and len(wachtwoord) >= 6 :
-        print('True')
+oldpassword = input('Voer hier je oude wachtwoord in: ')
+newpassword = input('Voer hier je nieuwe wachtwoord in: ')
+def password(newpassword, oldpassword):
+    if len(newpassword) < 6 or newpassword == oldpassword:
+        print('New password invalid')
+        return False
     else:
-        print('False')
-    return new_password
+        print('New password succeeded')
+        return True
 
-new_password(newpassword)
+print(password(newpassword, oldpassword))
